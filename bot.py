@@ -10,8 +10,8 @@ load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 DEEPL_AUTH_KEY = os.getenv("DEEPL_AUTH_KEY")
 
-TRIGGER_EN = os.getenv("TRIGGER_EN", "🌐")   # react -> English
-TRIGGER_ZH = os.getenv("TRIGGER_ZH", "🀄")   # react -> Mandarin
+TRIGGER_EN = os.getenv("TRIGGER_EN", "🇬🇧")
+TRIGGER_ZH = os.getenv("TRIGGER_ZH", "🇨🇳")
 
 DEFAULT_TARGET_EN = os.getenv("DEFAULT_TARGET_EN", "EN-GB")  # translate to English
 DEFAULT_TARGET_ZH = os.getenv("DEFAULT_TARGET_ZH", "ZH")     # translate to Chinese
@@ -105,13 +105,16 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
 
         emoji = str(payload.emoji)
 
-        # Decide target based on emoji
-        if emoji == TRIGGER_EN or getattr(payload.emoji, "name", "") == "globe_with_meridians":
+        # Pick target by emoji
+        if emoji == TRIGGER_EN:
             target = DEFAULT_TARGET_EN
         elif emoji == TRIGGER_ZH:
             target = DEFAULT_TARGET_ZH
         else:
             return
+
+        # optional cooldown (turn on if you want)
+        # if not cooldown_ok(payload.user_id): return
 
         channel = bot.get_channel(payload.channel_id) or await bot.fetch_channel(payload.channel_id)
         msg = await channel.fetch_message(payload.message_id)
