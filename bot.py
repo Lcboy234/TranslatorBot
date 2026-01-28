@@ -10,7 +10,8 @@ load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 DEEPL_AUTH_KEY = os.getenv("DEEPL_AUTH_KEY")
 
-TRIGGER_EMOJI = os.getenv("TRIGGER_EMOJI", "🌐")
+TRIGGER_EN = os.getenv("TRIGGER_EN", "🌐")   # react -> English
+TRIGGER_ZH = os.getenv("TRIGGER_ZH", "🀄")   # react -> Mandarin
 
 DEFAULT_TARGET_EN = os.getenv("DEFAULT_TARGET_EN", "EN-GB")  # translate to English
 DEFAULT_TARGET_ZH = os.getenv("DEFAULT_TARGET_ZH", "ZH")     # translate to Chinese
@@ -99,15 +100,17 @@ async def on_ready():
 @bot.event
 async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     try:
-        print("RAW:", str(payload.emoji), "name:", getattr(payload.emoji, "name", None))
-
-        # ignore bot users
         if payload.member and payload.member.bot:
             return
 
-        # accept both the unicode emoji and its name
-        emoji_ok = (str(payload.emoji) == TRIGGER_EMOJI) or (getattr(payload.emoji, "name", "") == "globe_with_meridians")
-        if not emoji_ok:
+        emoji = str(payload.emoji)
+
+        # Decide target based on emoji
+        if emoji == TRIGGER_EN or getattr(payload.emoji, "name", "") == "globe_with_meridians":
+            target = DEFAULT_TARGET_EN
+        elif emoji == TRIGGER_ZH:
+            target = DEFAULT_TARGET_ZH
+        else:
             return
 
         channel = bot.get_channel(payload.channel_id) or await bot.fetch_channel(payload.channel_id)
@@ -121,16 +124,16 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
             await msg.reply("No text to translate (only stickers/attachments).")
             return
 
-        # remove/disable cooldown while testing (optional)
-        # if not cooldown_ok(payload.user_id): return
+        if len(content) > 3000:
+            await msg.reply("Message too long to translate (limit ~3000 chars).")
+            return
 
-        translated, src = deepl_translate(content, DEFAULT_TARGET_EN)
-        embed = make_embed(src or "?", DEFAULT_TARGET_EN, translated, requester=payload.member)
+        translated, src = deepl_translate(content, target)
+        embed = make_embed(src or "?", target, translated, requester=payload.member)
         await msg.reply(embed=embed)
 
     except Exception as e:
         print("REACTION ERROR:", repr(e))
-        # try to report in-channel too
         try:
             channel = bot.get_channel(payload.channel_id) or await bot.fetch_channel(payload.channel_id)
             await channel.send(f"Reaction translate failed: `{repr(e)}`")
@@ -138,34 +141,7 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
             pass
 
 # --------------------------
-#  B) Auto-translate channels
-# --------------------------
-@bot.event
-async def on_message(message: discord.Message):
-    if message.author.bot:
-        return
-
-    # Only auto-translate in configured channels
-    if message.channel.id in AUTO_CHANNEL_IDS:
-        content = (message.content or "").strip()
-        if content and len(content) <= 1500:  # keep auto mode lighter
-            try:
-                en_text, src = deepl_translate(content, DEFAULT_TARGET_EN)
-
-                # If already English, skip (prevents spam)
-                if (src or "").upper().startswith("EN"):
-                    pass
-                else:
-                    embed = make_embed(src or "?", DEFAULT_TARGET_EN, en_text)
-                    await message.reply(embed=embed)
-
-            except Exception as e:
-                print("Auto-translate error:", repr(e))
-
-    await bot.process_commands(message)
-
-# --------------------------
-#  C) Slash command /translate
+#  B) Slash command /translate
 # --------------------------
 @bot.tree.command(name="translate", description="Translate text with DeepL (auto-detect source).")
 async def translate_cmd(interaction: discord.Interaction, text: str, target: str = ""):
