@@ -12,9 +12,13 @@ DEEPL_AUTH_KEY = os.getenv("DEEPL_AUTH_KEY")
 
 TRIGGER_EN = os.getenv("TRIGGER_EN", "🇬🇧")
 TRIGGER_ZH = os.getenv("TRIGGER_ZH", "🇨🇳")
+TRIGGER_FR = os.getenv("TRIGGER_FR", "🇫🇷")
+TRIGGER_DE = os.getenv("TRIGGER_DE", "🇩🇪")
 
-DEFAULT_TARGET_EN = os.getenv("DEFAULT_TARGET_EN", "EN-GB")  # translate to English
-DEFAULT_TARGET_ZH = os.getenv("DEFAULT_TARGET_ZH", "ZH")     # translate to Chinese
+TARGET_EN = os.getenv("TARGET_EN", "EN-GB")
+TARGET_ZH = os.getenv("TARGET_ZH", "ZH")
+TARGET_FR = os.getenv("TARGET_FR", "FR")
+TARGET_DE = os.getenv("TARGET_DE", "DE")
 
 AUTO_CHANNEL_IDS_RAW = os.getenv("AUTO_CHANNEL_IDS", "").strip()
 AUTO_CHANNEL_IDS = set()
@@ -105,15 +109,19 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
 
         emoji = str(payload.emoji)
 
-        # Pick target by emoji
-        if emoji == TRIGGER_EN:
-            target = DEFAULT_TARGET_EN
-        elif emoji == TRIGGER_ZH:
-            target = DEFAULT_TARGET_ZH
-        else:
+        # Map emoji -> DeepL target language
+        emoji_to_target = {
+            TRIGGER_EN: TARGET_EN,
+            TRIGGER_ZH: TARGET_ZH,
+            TRIGGER_FR: TARGET_FR,
+            TRIGGER_DE: TARGET_DE,
+        }
+
+        target = emoji_to_target.get(emoji)
+        if not target:
             return
 
-        # optional cooldown (turn on if you want)
+        # optional cooldown
         # if not cooldown_ok(payload.user_id): return
 
         channel = bot.get_channel(payload.channel_id) or await bot.fetch_channel(payload.channel_id)
