@@ -46,6 +46,9 @@ TRIGGER_LT = os.getenv("TRIGGER_LT", "🇱🇹")
 TRIGGER_LV = os.getenv("TRIGGER_LV", "🇱🇻")
 TRIGGER_ET = os.getenv("TRIGGER_ET", "🇪🇪")
 TRIGGER_SL = os.getenv("TRIGGER_SL", "🇸🇮")
+TRIGGER_TH = os.getenv("TRIGGER_TH", "🇹🇭")
+TRIGGER_VI = os.getenv("TRIGGER_VI", "🇻🇳")
+TRIGGER_HE = os.getenv("TRIGGER_HE", "🇮🇱")
 
 # more targets
 TARGET_ES = os.getenv("TARGET_ES", "ES")
@@ -73,6 +76,9 @@ TARGET_LT = os.getenv("TARGET_LT", "LT")
 TARGET_LV = os.getenv("TARGET_LV", "LV")
 TARGET_ET = os.getenv("TARGET_ET", "ET")
 TARGET_SL = os.getenv("TARGET_SL", "SL")
+TARGET_TH = os.getenv("TARGET_TH", "TH")
+TARGET_VI = os.getenv("TARGET_VI", "VI")
+TARGET_HE = os.getenv("TARGET_HE", "HE")
 
 AUTO_CHANNEL_IDS_RAW = os.getenv("AUTO_CHANNEL_IDS", "").strip()
 AUTO_CHANNEL_IDS = set()
@@ -195,6 +201,10 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
             TRIGGER_LV: TARGET_LV,
             TRIGGER_ET: TARGET_ET,
             TRIGGER_SL: TARGET_SL,
+
+            TRIGGER_TH: TARGET_TH,
+            TRIGGER_VI: TARGET_VI,
+            TRIGGER_HE: TARGET_HE,
         }
 
         target = emoji_to_target.get(emoji)
