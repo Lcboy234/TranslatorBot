@@ -20,6 +20,60 @@ TARGET_ZH = os.getenv("TARGET_ZH", "ZH")
 TARGET_FR = os.getenv("TARGET_FR", "FR")
 TARGET_DE = os.getenv("TARGET_DE", "DE")
 
+# more triggers
+TRIGGER_ES = os.getenv("TRIGGER_ES", "🇪🇸")
+TRIGGER_IT = os.getenv("TRIGGER_IT", "🇮🇹")
+TRIGGER_PT = os.getenv("TRIGGER_PT", "🇵🇹")
+TRIGGER_NL = os.getenv("TRIGGER_NL", "🇳🇱")
+TRIGGER_PL = os.getenv("TRIGGER_PL", "🇵🇱")
+TRIGGER_RU = os.getenv("TRIGGER_RU", "🇷🇺")
+TRIGGER_JA = os.getenv("TRIGGER_JA", "🇯🇵")
+TRIGGER_KO = os.getenv("TRIGGER_KO", "🇰🇷")
+TRIGGER_SV = os.getenv("TRIGGER_SV", "🇸🇪")
+TRIGGER_DA = os.getenv("TRIGGER_DA", "🇩🇰")
+TRIGGER_NB = os.getenv("TRIGGER_NB", "🇳🇴")
+TRIGGER_FI = os.getenv("TRIGGER_FI", "🇫🇮")
+TRIGGER_EL = os.getenv("TRIGGER_EL", "🇬🇷")
+TRIGGER_TR = os.getenv("TRIGGER_TR", "🇹🇷")
+TRIGGER_UK = os.getenv("TRIGGER_UK", "🇺🇦")
+TRIGGER_ID = os.getenv("TRIGGER_ID", "🇮🇩")
+TRIGGER_CS = os.getenv("TRIGGER_CS", "🇨🇿")
+TRIGGER_RO = os.getenv("TRIGGER_RO", "🇷🇴")
+TRIGGER_HU = os.getenv("TRIGGER_HU", "🇭🇺")
+TRIGGER_SK = os.getenv("TRIGGER_SK", "🇸🇰")
+TRIGGER_BG = os.getenv("TRIGGER_BG", "🇧🇬")
+TRIGGER_LT = os.getenv("TRIGGER_LT", "🇱🇹")
+TRIGGER_LV = os.getenv("TRIGGER_LV", "🇱🇻")
+TRIGGER_ET = os.getenv("TRIGGER_ET", "🇪🇪")
+TRIGGER_SL = os.getenv("TRIGGER_SL", "🇸🇮")
+
+# more targets
+TARGET_ES = os.getenv("TARGET_ES", "ES")
+TARGET_IT = os.getenv("TARGET_IT", "IT")
+TARGET_PT = os.getenv("TARGET_PT", "PT-PT")
+TARGET_NL = os.getenv("TARGET_NL", "NL")
+TARGET_PL = os.getenv("TARGET_PL", "PL")
+TARGET_RU = os.getenv("TARGET_RU", "RU")
+TARGET_JA = os.getenv("TARGET_JA", "JA")
+TARGET_KO = os.getenv("TARGET_KO", "KO")
+TARGET_SV = os.getenv("TARGET_SV", "SV")
+TARGET_DA = os.getenv("TARGET_DA", "DA")
+TARGET_NB = os.getenv("TARGET_NB", "NB")
+TARGET_FI = os.getenv("TARGET_FI", "FI")
+TARGET_EL = os.getenv("TARGET_EL", "EL")
+TARGET_TR = os.getenv("TARGET_TR", "TR")
+TARGET_UK = os.getenv("TARGET_UK", "UK")
+TARGET_ID = os.getenv("TARGET_ID", "ID")
+TARGET_CS = os.getenv("TARGET_CS", "CS")
+TARGET_RO = os.getenv("TARGET_RO", "RO")
+TARGET_HU = os.getenv("TARGET_HU", "HU")
+TARGET_SK = os.getenv("TARGET_SK", "SK")
+TARGET_BG = os.getenv("TARGET_BG", "BG")
+TARGET_LT = os.getenv("TARGET_LT", "LT")
+TARGET_LV = os.getenv("TARGET_LV", "LV")
+TARGET_ET = os.getenv("TARGET_ET", "ET")
+TARGET_SL = os.getenv("TARGET_SL", "SL")
+
 AUTO_CHANNEL_IDS_RAW = os.getenv("AUTO_CHANNEL_IDS", "").strip()
 AUTO_CHANNEL_IDS = set()
 if AUTO_CHANNEL_IDS_RAW:
@@ -115,6 +169,32 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
             TRIGGER_ZH: TARGET_ZH,
             TRIGGER_FR: TARGET_FR,
             TRIGGER_DE: TARGET_DE,
+
+            TRIGGER_ES: TARGET_ES,
+            TRIGGER_IT: TARGET_IT,
+            TRIGGER_PT: TARGET_PT,
+            TRIGGER_NL: TARGET_NL,
+            TRIGGER_PL: TARGET_PL,
+            TRIGGER_RU: TARGET_RU,
+            TRIGGER_JA: TARGET_JA,
+            TRIGGER_KO: TARGET_KO,
+            TRIGGER_SV: TARGET_SV,
+            TRIGGER_DA: TARGET_DA,
+            TRIGGER_NB: TARGET_NB,
+            TRIGGER_FI: TARGET_FI,
+            TRIGGER_EL: TARGET_EL,
+            TRIGGER_TR: TARGET_TR,
+            TRIGGER_UK: TARGET_UK,
+            TRIGGER_ID: TARGET_ID,
+            TRIGGER_CS: TARGET_CS,
+            TRIGGER_RO: TARGET_RO,
+            TRIGGER_HU: TARGET_HU,
+            TRIGGER_SK: TARGET_SK,
+            TRIGGER_BG: TARGET_BG,
+            TRIGGER_LT: TARGET_LT,
+            TRIGGER_LV: TARGET_LV,
+            TRIGGER_ET: TARGET_ET,
+            TRIGGER_SL: TARGET_SL,
         }
 
         target = emoji_to_target.get(emoji)
